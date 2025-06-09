@@ -17,6 +17,7 @@ The project explores forecasting techniques using deep learning, offering a hand
 - **Training and Validation**: Includes error metric evaluations like MAE, MSE, and RMSE.
 - **Forecast Visualization**: In-notebook insights and result interpretation using tabular data.
 - **Extensible Pipeline**: Modular notebook design makes it easy to adapt for different datasets or forecasting problems.
+- **Predicted vs Actual Graphs** for temperature and humidity trends using `matplotlib` and `seaborn`.
 
 ---
 
