@@ -21,10 +21,17 @@ The project explores forecasting techniques using deep learning, offering a hand
 
 ---
 
+## 📉 Sample Graphs
+
+### Temperature Graph
+![Temperature Prediction](temp_prediction.png)
+
+### 📊 Predicted vs Actual Humidity
+![Humidity Prediction](humidity_prediction.png)
+
 ## 📂 Repository Structure
 
 ```bash
 📁 weather-forecasting
 ├── main.ipynb            # Jupyter Notebook with complete implementation
 ├── README.md             # Project description and usage guide
-└── requirements.txt      # (Optional) Python dependencies file
