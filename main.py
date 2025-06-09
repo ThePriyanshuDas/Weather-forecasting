@@ -8,6 +8,8 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor  #Mod
 from sklearn.metrics import mean_squared_error #To measure the accuracy of our predictions
 from datetime import datetime, timedelta  #to handle date and time
 import pytz
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 API_KEY = 'YOUR API KEY'
@@ -69,12 +71,13 @@ def prepare_regression_data(data, feature):
     x, y = [], [] #initialize list for feature and target values
     for i in range(len(data) - 1):
         x.append(data[feature].iloc[i])
-        
         y.append(data[feature].iloc[i+1])
         
     x = np.array(x).reshape(-1, 1)
     y = np.array(y)
-    return x, y
+     # Take last 'lookback' actual values for comparison
+    expected_values = data[feature].iloc[-lookback:].tolist()
+    return x, y, expected_values
 
 
 # Train regession model
@@ -91,6 +94,47 @@ def predict_future (model, current_value):
         next_value = model.predict(np.array([[predictions[-1]]]))
         predictions.append(next_value[0])
     return predictions [1:]
+
+
+#Graph plot
+def plot_future_weather(future_times, future_temp, future_humidity, city):
+    plt.figure(figsize=(12, 5))
+    
+    # Temperature Plot
+    plt.subplot(1, 2, 1)
+    sns.lineplot(x=future_times, y=future_temp, marker='o', color='tomato')
+    plt.title(f'Future Temperature Forecast - {city}')
+    plt.xlabel('Time')
+    plt.ylabel('Temperature (°C)')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+
+    # Humidity Plot
+    plt.subplot(1, 2, 2)
+    sns.lineplot(x=future_times, y=future_humidity, marker='o', color='skyblue')
+    plt.title(f'Future Humidity Forecast - {city}')
+    plt.xlabel('Time')
+    plt.ylabel('Humidity (%)')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_prediction_vs_actual(time_labels, predicted, actual, ylabel, title, city):
+    plt.figure(figsize=(10, 5))
+    sns.lineplot(x=time_labels, y=actual, marker='o', label='Expected', color='green')
+    sns.lineplot(x=time_labels, y=predicted, marker='o', label='Predicted', color='orange')
+    
+    plt.title(f"{title} - Predicted vs Expected ({city})", fontsize=14)
+    plt.xlabel("Time", fontsize=12)
+    plt.ylabel(ylabel, fontsize=12)
+    plt.xticks(rotation=45)
+    plt.grid(True, linestyle='--', alpha=0.6)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
 
 
 # Weather analysis function
@@ -171,6 +215,13 @@ def weather_view():
     
     for time, humidity in zip(future_times, future_humidity):
         print(f" {time}: {round (humidity, 1)}%")
+
+    # Plot graphs
+    plot_future_weather(future_times, future_temp, future_humidity, city)
+
+    # Comparison Graphs
+    plot_prediction_vs_actual(future_times, future_temp, list(historical_data['Temp'].tail(5)), "Temperature (°C)", "Temperature", city)
+    plot_prediction_vs_actual(future_times, future_humidity, list(historical_data['Humidity'].tail(5)), "Humidity (%)", "Humidity", city)
 
 
 weather_view()
