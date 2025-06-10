@@ -26,7 +26,7 @@ The project explores forecasting techniques using deep learning, offering a hand
 ### Temperature Graph
 ![Temperature Prediction](temp_prediction.png)
 
-### 📊 Predicted vs Actual Humidity
+### 📊 Humidity Graph
 ![Humidity Prediction](humidity_prediction.png)
 
 ## 📂 Repository Structure
